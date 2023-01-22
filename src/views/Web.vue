@@ -67,7 +67,7 @@ export default {
             </div>
         </div>
         <div class="myself">
-            <div @click="note">
+            <div class="message" @click="note">
                 昵称：{{ store.nickname }}<br>
                 手机号：{{ store.phone }}<br>
                 性别:{{ store.sex }}<br>
@@ -75,7 +75,7 @@ export default {
                 密码：{{ store.password }}
             </div>
 
-            <p @click="notebook">我的笔记</p>
+            <p class="message" @click="notebook">我的笔记</p>
         </div>
     </div>
 
@@ -83,7 +83,7 @@ export default {
 <style>
 .web {
     width: 1000px;
-    height: auto;
+    height: 80px;
     margin-top: 20px;
     margin-left: 150px;
     padding: 20px;
@@ -106,4 +106,12 @@ export default {
     margin-top: 20px;
     background-color: rgb(255, 225, 205);
 }
+
+.message{
+    background-color: rgb(236, 236, 236);
+    margin-bottom: 20px;
+    border-radius: 8px;
+    padding: 5px;
+}
+
 </style>
