@@ -44,9 +44,7 @@ export default {
     sign: function () {
       this.$router.push('/sign')
     },
-    change: function () {
-      this.$router.push('/change')
-    }
+    
   }
 }
 </script>
@@ -70,7 +68,7 @@ export default {
       </div>
       <div class="buttonLogin">
         <button class="btn" @click="login">登录</button>
-        <button class="btn" @click="change">修改密码</button>
+        
         <button class="btn" @click="sign">注册</button>
       </div>
     </form>

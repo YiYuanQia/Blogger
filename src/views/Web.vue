@@ -16,10 +16,12 @@ export default {
             loveMode: true,
             // 初始图片
             img: imgtwo,
+            //选中博客
             seleteWeb: 0,
             // 用户信息
             store,
-            count: 0
+            count: 0,
+            seen: false
         }
 
     },
@@ -46,6 +48,16 @@ export default {
             localStorage.setItem('love-count', this.bloggers[this.seleteWeb].count)
             localStorage.setItem('love-mode', this.loveMode)
         },
+        turn: function () {
+            this.$router.push('./change')
+        },
+        onMouseOver() {
+            this.seen = true
+        },
+        onMouseOut() {
+            this.seen = false
+        },
+        // 界面跳转
         note: function () {
             this.$router.push('./login')
         },
@@ -67,16 +79,30 @@ export default {
             </div>
         </div>
         <div class="myself">
-            <div class="message" @click="note">
-                昵称：{{ store.nickname }}<br>
-                手机号：{{ store.phone }}<br>
-                性别:{{ store.sex }}<br>
-                邮箱地址：{{ store.emailaddress }}<br>
-                密码：{{ store.password }}
+            <div class="message">
+                <p @click="note">登录</p>
+                <li>
+                    昵称：{{ store.nickname }}
+                </li>
+                <li>
+                    手机号：{{ store.phone }}
+                </li>
+                <li>
+                    性别:{{ store.sex }}
+                </li>
+                <li>
+                    邮箱地址：{{ store.emailaddress }}
+                </li>
+                <li>
+                    密码：{{ store.password }}
+                    <img id="turn" @click="turn" @mouseenter="onMouseOver" @mouseleave="onMouseOut" src="./img/turn.png"
+                    alt="" width="20" height="20">
+                <p v-show="seen" id="seen">修改密码</p>
+                </li>
             </div>
-
             <p class="message" @click="notebook">我的笔记</p>
         </div>
+
     </div>
 
 </template>
@@ -99,6 +125,7 @@ export default {
     padding: 20px;
     border: 1px solid rgb(0, 0, 0);
     border-radius: 8px;
+
 }
 
 #love {
@@ -107,11 +134,29 @@ export default {
     background-color: rgb(255, 225, 205);
 }
 
-.message{
+.message {
     background-color: rgb(236, 236, 236);
     margin-bottom: 20px;
     border-radius: 8px;
     padding: 5px;
+    position: relative;
 }
 
+.message li{
+    list-style: none;
+}
+.message li:hover {
+    background-color: rgb(198, 198, 198);
+}
+
+#turn:hover {
+    transform: scale(1.2);
+}
+
+#seen {
+    position: absolute;
+    bottom: 10px;
+    left: 140px;
+    font-size: 12px;
+}
 </style>
