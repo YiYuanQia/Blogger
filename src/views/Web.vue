@@ -3,11 +3,11 @@ import imgone from './img/love_red.webp'
 import imgtwo from './img/love_white.webp'
 import { store } from '../store'
 
-
 export default {
     data() {
         return {
             bloggers: [{
+                title:'朝鲜阅兵',
                 content: '这是一篇说明文',
                 id: 1,
                 count: 0
@@ -21,7 +21,12 @@ export default {
             // 用户信息
             store,
             count: 0,
-            seen: false
+            seen: false,
+            nickname: '--',
+            phone: '--',
+            sex: '--',
+            emailaddress: '--',
+            password: '--'
         }
 
     },
@@ -49,8 +54,15 @@ export default {
             localStorage.setItem('love-mode', this.loveMode)
         },
         turn: function () {
-            this.$router.push('./change')
+            if (this.nickname == '--') {
+                alert('请先登录')
+            }
+            else {
+                this.$router.push('./change')
+            }
+
         },
+        //鼠标放置移开事件
         onMouseOver() {
             this.seen = true
         },
@@ -62,17 +74,30 @@ export default {
             this.$router.push('./login')
         },
         notebook: function () {
-            this.$router.push('./note')
+            if (this.nickname == '--') {
+                alert('请先登录')
+            }
+            else {
+                this.$router.push('./note')
+            }
+
         }
     },
     mounted() {
         this.bloggers[this.seleteWeb].count = Number(localStorage.getItem('love-count')) || 0
+        this.nickname = localStorage.getItem('nickname') || '--'
+        this.phone = localStorage.getItem('phone') || '--'
+        this.sex = localStorage.getItem('sex') || '--'
+        this.emailaddress = localStorage.getItem('email') || '--'
+        this.password = localStorage.getItem('password') || '--'
+
     }
 }
 </script>
 <template>
     <div style="display:flex">
-        <div class="web" v-for="blogger, index in bloggers" @click="webselete(index)">
+        <div class="web" v-for="blogger, index in bloggers" @click="webselete(index)"
+            :class="(seleteWeb == index) ? 'webse' : ''">
             {{ blogger.content }}<br>
             <div>
                 <img id="love" @click="love" :src="img" width="20" height="20"> {{ blogger.count }}
@@ -80,24 +105,24 @@ export default {
         </div>
         <div class="myself">
             <div class="message">
-                <p @click="note">登录</p>
+                <p @click="note" id="login">登录</p>
                 <li>
-                    昵称：{{ store.nickname }}
+                    昵称：{{ nickname }}
                 </li>
                 <li>
-                    手机号：{{ store.phone }}
+                    手机号：{{ phone }}
                 </li>
                 <li>
-                    性别:{{ store.sex }}
+                    性别:{{ sex }}
                 </li>
                 <li>
-                    邮箱地址：{{ store.emailaddress }}
+                    邮箱地址：{{ emailaddress }}
                 </li>
                 <li>
-                    密码：{{ store.password }}
+                    密码：{{ password }}
                     <img id="turn" @click="turn" @mouseenter="onMouseOver" @mouseleave="onMouseOut" src="./img/turn.png"
-                    alt="" width="20" height="20">
-                <p v-show="seen" id="seen">修改密码</p>
+                        alt="" width="20" height="20">
+                    <p v-show="seen" id="seen">修改密码</p>
                 </li>
             </div>
             <p class="message" @click="notebook">我的笔记</p>
@@ -115,6 +140,10 @@ export default {
     padding: 20px;
     border: 1px solid rgb(0, 0, 0);
     border-radius: 8px;
+}
+
+.webse {
+    border: 2px solid #646cff;
 }
 
 .myself {
@@ -142,9 +171,10 @@ export default {
     position: relative;
 }
 
-.message li{
+.message li {
     list-style: none;
 }
+
 .message li:hover {
     background-color: rgb(198, 198, 198);
 }

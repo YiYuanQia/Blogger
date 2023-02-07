@@ -1,10 +1,13 @@
 <script >
+import { store } from '../store'
+
 export default {
     data() {
         return {
             id: '',
             oldpassword: '',
             newpassword: '',
+            store
         }
     },
     methods: {
@@ -40,7 +43,9 @@ export default {
                 .then(res => res.json())
                 .then(data => {
                     console.log(data)
+                    localStorage.setItem('password', this.newpassword)
                     alert('密码修改成功')
+                    this.$router.push('./web')
                     
                 })
                 .catch(err => console.log(err))

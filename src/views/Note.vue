@@ -221,6 +221,7 @@ export default {
         </div>
 
       </div>
+      <!-- 显示隐藏按钮 -->
       <button @click="show" :id="(showMode) ? 'showModeone' : 'showModetwo'">{{ showConceal }}</button>
       <div style="margin-top: 80px; padding: 20px;">
         <div class="cell" v-for="cell, index in cells" :class="(seleteCell == index) ? 'cellse' : ''"
