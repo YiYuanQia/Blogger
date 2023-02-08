@@ -1,8 +1,7 @@
 <script>
 import { store } from '../store'
 import { marked } from 'marked'
-import imgone from './img/love_red.webp'
-import imgtwo from './img/love_white.webp'
+
 
 export default {
   data() {
@@ -10,12 +9,12 @@ export default {
       title: '新笔记',
       // 笔记标题数组
       notes: [{
-        content: '新笔记',
+        content: '新博客',
         id: 1
       }],
       // 单元格初始样式 数组
       cells: [{
-        text: '这是一篇新笔记',
+        text: '这是一篇新博客',
         time: Date.now()
       }],
       //单元格填充内容
@@ -40,8 +39,7 @@ export default {
       // 统计点赞数量
       count: 0,
       // 设置点赞状态
-      loveMode: true,
-      img:imgtwo
+      
     }
   },
 
@@ -114,7 +112,7 @@ export default {
     idup() {
       //新笔记模板
       let noteTemplate = [{
-        text: '这是一篇新笔记',
+        text: '这是一篇新博客',
         time: Date.now()
       }]
       this.notes.push({
@@ -170,22 +168,7 @@ export default {
     change: function () {
       this.dawnDarkMode = !this.dawnDarkMode
     },
-    // 点赞
-    love: function () {
-      if (this.loveMode) {
-        this.count++
-        this.img=imgone
-      }
-      else {
-        this.count--
-        this.img=imgtwo
-      }
-      console.log(this.loveMode)
-      this.loveMode = !this.loveMode
-      console.log(this.loveMode)
-      localStorage.setItem('love-count', this.count)
-      localStorage.setItem('love-mode',this.loveMode)
-    }
+    
   },
   // 读取浏览器存储信息 if 语句判断 有信息读取
   mounted() {
@@ -196,9 +179,9 @@ export default {
       this.notes = JSON.parse(localStorage.getItem('note-list'))
     }
     this.id = Number(localStorage.getItem('id-title')) || 1
-    this.count = Number(localStorage.getItem('love-count')) || 0
-    this.loveMode=localStorage.getItem('love-mode')
-    this.store.nickname = localStorage.getItem('nickname')
+    
+    
+    this.store.nickname = JSON.parse(localStorage.getItem('nickname'))||'匿名'
 
   },
 }
@@ -251,7 +234,6 @@ export default {
     <div id="detail">
       <p>序号：{{ seleteCell }}</p>
       <!-- <p>时间：{{ timenow(cells[seleteCell].time) }}</p> -->
-      <img @click="love" :src="img" alt="" width="20" height="20">
     </div>
     
   </div>

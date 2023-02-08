@@ -20,13 +20,15 @@ export default {
             seleteWeb: 0,
             // 用户信息
             store,
-            count: 0,
-            seen: false,
+            login:'登录',
             nickname: '--',
             phone: '--',
             sex: '--',
             emailaddress: '--',
-            password: '--'
+            password: '--',
+
+            seen: false,
+            
         }
 
     },
@@ -70,10 +72,13 @@ export default {
             this.seen = false
         },
         // 界面跳转
-        note: function () {
+        denglu: function () {
             this.$router.push('./login')
         },
-        notebook: function () {
+        sign:function(){
+            this.$router.push('./sign')
+        },
+        blogger: function () {
             if (this.nickname == '--') {
                 alert('请先登录')
             }
@@ -85,7 +90,8 @@ export default {
     },
     mounted() {
         this.bloggers[this.seleteWeb].count = Number(localStorage.getItem('love-count')) || 0
-        this.nickname = localStorage.getItem('nickname') || '--'
+        this.login=JSON.parse(localStorage.getItem('id'))||'登录'
+        this.nickname = JSON.parse(localStorage.getItem('nickname')) || '--'
         this.phone = localStorage.getItem('phone') || '--'
         this.sex = localStorage.getItem('sex') || '--'
         this.emailaddress = localStorage.getItem('email') || '--'
@@ -104,8 +110,10 @@ export default {
             </div>
         </div>
         <div class="myself">
+            <p @click="denglu" id="login" style="font-size: 14px;">{{ login }}</p>
             <div class="message">
-                <p @click="note" id="login">登录</p>
+                
+                <!-- <p @click="sign" id="sign">注册</p> -->
                 <li>
                     昵称：{{ nickname }}
                 </li>
@@ -125,7 +133,8 @@ export default {
                     <p v-show="seen" id="seen">修改密码</p>
                 </li>
             </div>
-            <p class="message" @click="notebook">我的笔记</p>
+            <p class="message" @click="blogger">我的博客</p>
+
         </div>
 
     </div>
@@ -156,6 +165,15 @@ export default {
     border-radius: 8px;
 
 }
+#login{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    background-color: rgb(236, 236, 236);
+}
 
 #love {
     margin-left: 50px;
@@ -177,6 +195,7 @@ export default {
 
 .message li:hover {
     background-color: rgb(198, 198, 198);
+    cursor: pointer;
 }
 
 #turn:hover {

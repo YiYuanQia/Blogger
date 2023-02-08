@@ -20,14 +20,15 @@ export default {
         .then(data => {
           console.log(data)
           if (data.id === this.username && data.password === this.password) {
-            console.log(data.name)
+            
             console.log(data)
             this.store.nickname = data.name
             this.store.phone=data.phone
             this.store.sex=data.sex
             this.store.emailaddress=data.email
             this.store.password=data.password
-            localStorage.setItem('nickname', this.store.nickname)
+            localStorage.setItem('id',JSON.stringify(data.id))
+            localStorage.setItem('nickname', JSON.stringify(this.store.nickname))
             localStorage.setItem('phone', this.store.phone)
             localStorage.setItem('sex', this.store.sex)
             localStorage.setItem('email', this.store.emailaddress)
