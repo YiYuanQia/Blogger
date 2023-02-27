@@ -4,52 +4,57 @@ export default {
   data() {
     return {
       username: '',
-      name: '',
       password: '',
       store
     }
   },
   methods: {
+
     login: function () {
       if (this.username.trim() == '' || this.password.trim() == '') {
         alert('用户名或密码不能为空，请输入账号密码')
         return
       }
-      fetch('https://db-api.amarea.cn/users/' + this.username)
+      fetch('https://blog-server-api.amarea.cn/user/login', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "username": this.username.trim(),
+          "password": this.password.trim(),
+        })
+      })
         .then(res => res.json())
         .then(data => {
           console.log(data)
-          if (data.id === this.username && data.password === this.password) {
-            
-            console.log(data)
-            this.store.nickname = data.name
-            this.store.phone=data.phone
-            this.store.sex=data.sex
-            this.store.emailaddress=data.email
-            this.store.password=data.password
-            localStorage.setItem('id',JSON.stringify(data.id))
-            localStorage.setItem('nickname', JSON.stringify(this.store.nickname))
-            localStorage.setItem('phone', this.store.phone)
-            localStorage.setItem('sex', this.store.sex)
-            localStorage.setItem('email', this.store.emailaddress)
-            localStorage.setItem('password', this.store.password)
-            
-            this.$router.push('./web')
+          if (data.code == 0) {
+            localStorage.setItem('uid', data.data.id)
+            localStorage.setItem('token', data.data.token)
+
+            // 用户信息
+            alert('登陆成功')
+            this.$router.push('/home')
           }
           else {
-            throw new Error("账号或密码错误")
+            throw new Error('账号或密码错误')
           }
+
         })
         .catch(err => alert(err))
     },
     sign: function () {
       this.$router.push('/sign')
     },
-    
-  }
+
+  },
+  
+
+
 }
 </script>
 <template>
+  {{ uid }}
   <div class="wrap">
     <form style="border:2px solid #000;padding: 40px;border-radius: 8px;">
       <div class="form-group">
@@ -69,13 +74,15 @@ export default {
       </div>
       <div class="buttonLogin">
         <button class="btn" @click="login">登录</button>
-        
+
         <button class="btn" @click="sign">注册</button>
       </div>
     </form>
   </div>
 </template>
 <style>
+
+
 .wrap {
   display: flex;
   align-items: center;

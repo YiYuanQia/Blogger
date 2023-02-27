@@ -4,53 +4,43 @@ import { store } from '../store'
 export default {
     data() {
         return {
-            id: '',
-            oldpassword: '',
+            token: '',
             newpassword: '',
             store
         }
     },
     methods: {
         confirm: function () {
-            if (this.id.trim() == '' || this.oldpassword.trim() == '') {
-                console.log('用户名或密码不能为空，请输入账号密码')
-                return
-            }
-            fetch('https://db-api.amarea.cn/users/' + this.id)
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data)
-                    if (data.id === this.id && data.password === this.oldpassword) {
-                        this.confirmnext()
-                    }
-                    else {
-                        throw new Error("账号或密码错误")
-                    }
-                })
-                .catch(err => alert(err))
-        },
-        confirmnext: function () {
-            const myHeaders = new Headers()
-            myHeaders.append("Content-Type", "application/json")
-            fetch('https://db-api.amarea.cn/users/' + this.id,
+            fetch('https://blog-server-api.amarea.cn/user/edit',
                 {
-                    method: "PATCH",
-                    headers: myHeaders,
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({
-                        password: this.newpassword,
+                        "token": this.token.trim(),
+                        "password": this.newpassword.trim(),
+
                     })
                 })
                 .then(res => res.json())
                 .then(data => {
                     console.log(data)
-                    localStorage.setItem('password', this.newpassword)
+
                     alert('密码修改成功')
-                    this.$router.push('./web')
-                    
+                    this.$router.push('/home')
+
                 })
                 .catch(err => console.log(err))
         }
-    }
+    },
+    mounted() {
+        this.token = localStorage.getItem('token')
+        if (!this.token) {
+            alert('请先登录')
+            this.$router.push('/login')
+        }
+    },
 }
 </script>
 <template>
@@ -59,18 +49,7 @@ export default {
             <div class="form-group">
                 <p style="font-size:22px;margin: 0 auto;">修改密码</p>
             </div>
-            <div class="form-group">
-                <p>
-                    用户名:
-                    <input :style="{ height: 25 + 'px' }" v-model="id" type="text" placeholder="请输入用户名">
-                </p>
-            </div>
-            <div class="form-group">
-                <p>
-                    旧密码:
-                    <input :style="{ height: 25 + 'px' }" v-model="oldpassword" type="text" placeholder="请输入旧密码">
-                </p>
-            </div>
+            
             <div class="form-group">
                 <p>
                     新密码:
@@ -79,7 +58,7 @@ export default {
             </div>
             <div class="buttonLogin">
                 <button class="btn" @click="confirm">确认</button>
-                <button class="btn" @click="cancel">取消</button>
+                <button class="btn" @click="$router.push('/home')">取消</button>
             </div>
         </form>
     </div>

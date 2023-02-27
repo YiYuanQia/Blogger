@@ -2,8 +2,8 @@
 export default {
     data() {
         return {
-            id: '',
-            name: '',
+            username: '',
+            nickname: '',
             password: '',
             twicepassword: '',
             email: '',
@@ -13,43 +13,40 @@ export default {
     },
     methods: {
         sign: function () {
-            if (this.password !== this.twicepassword) {
-                alert('两次密码输入不一')
-                return
+            // if (this.password !== this.twicepassword) {
+            //     alert('两次密码输入不一')
+            //     return
 
-            }
-            if (this.id.trim() == '' || this.name.trim() == '' || this.password.trim() == '' || this.twicepassword.trim() == '' || this.email.trim() == '' || this.phone.trim() == '' || this.sex.trim() == '') {
-                alert('请输入完整信息')
-                return
-            }
+            // }
+            // if (this.id.trim() == '' || this.name.trim() == '' || this.password.trim() == '' || this.twicepassword.trim() == '' || this.email.trim() == '' || this.phone.trim() == '' || this.sex.trim() == '') {
+            //     alert('请输入完整信息')
+            //     return
+            // }
             const myHeaders = new Headers()
             myHeaders.append("Content-Type", "application/json")
-            fetch('https://db-api.amarea.cn/users/',
+            fetch('https://blog-server-api.amarea.cn/user/register',
                 {
                     method: "POST",
                     headers: myHeaders,
                     body: JSON.stringify({
-                        id: this.id,
-                        name: this.name,
-                        password: this.password,
-                        email: this.email,
-                        phone: this.phone,
-                        sex: this.sex
+                        'username': this.username,
+                        'nickname': this.nickname,
+                        'password': this.password,
+                        'email': this.email,
+                        'sex': this.sex
                     })
                 })
                 .then(response => {
-                    if (response.status == 500) {
-                        console.log("用户已注册")
-                        throw new Error("用户已注册")
-                    }
-                    
+
                     return response.json()
                 })
                 .then(data => {
-                    if(this.password==this.twicepassword){
-                        console.log('注册成功')
+                    if(data.code==0){
                         alert('注册成功')
                         this.$router.push('/login')
+                    }
+                    else{
+                        alert(data.msg)
                     }
                     console.log(data)
                 })
@@ -66,33 +63,27 @@ export default {
             </div>
             <div class="form-group">
                 用户名：
-                <input :style="{ height: 25 + 'px' }" type="text" v-model="id" placeholder="请输入账户名">
+                <input :style="{ height: 25 + 'px' }" type="text" v-model="username" placeholder="请输入账户名">
             </div>
             <div class="form-group">
                 昵称：
-                <input :style="{ height: 25 + 'px' }" type="text" v-model="name" placeholder="请输入昵称">
+                <input :style="{ height: 25 + 'px' }" type="text" v-model="nickname" placeholder="请输入昵称">
             </div>
             <div class="form-group">
                 密码：
                 <input :style="{ height: 25 + 'px' }" type="text" v-model="password" placeholder="请输入密码">
             </div>
-            <div class="form-group">
-                密码：
-                <input :style="{ height: 25 + 'px' }" type="text" v-model="twicepassword" placeholder="请再次输入密码">
-            </div>
+            
             <div class="form-group">
                 邮箱：
                 <input :style="{ height: 25 + 'px' }" type="text" v-model="email" placeholder="请输入邮箱地址">
             </div>
-            <div class="form-group">
-                电话：
-                <input :style="{ height: 25 + 'px' }" type="text" v-model="phone" placeholder="请输入电话号码">
-            </div>
+           
             <div>
                 性别：
-                <input type="radio" v-model="sex" value="男" id="male">
+                <input type="radio" v-model="sex" value="MALE" id="male">
                 <label for="male">男</label>
-                <input type="radio" v-model="sex" value="女" id="famale">
+                <input type="radio" v-model="sex" value="FEMALE" id="famale">
                 <label for="famale">女</label>
             </div>
             <div class="buttonsign">
